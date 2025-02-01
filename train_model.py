@@ -17,6 +17,7 @@ df = pd.read_csv('sms-spam.csv')
 df = df.drop(['Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4'], axis=1)
 df = df.rename(columns={'v1': 'result', 'v2': 'input'})
 
+
 # Add some modern spam examples
 modern_spam = [
     # Tech and Device Scams

@@ -22,6 +22,8 @@ import base64
 
 ps = PorterStemmer()
 
+if 'input_text' not in st.session_state:
+    st.session_state.input_text = ""
 
 def transform_text(text):
     text = text.lower()
@@ -122,17 +124,17 @@ with col2:
     input_sms = st.text_area(
         "Enter your message here",
         height=150,
-        placeholder="Type or paste your message here..."
+        placeholder="Type or paste your message here...",
+        key="input_text"
     )
     
     col_button1, col_button2 = st.columns(2)
     with col_button1:
         predict_button = st.button("🔍 Analyze Message")
     with col_button2:
-        clear_button = st.button("🗑️ Clear")
-        if clear_button:
-            input_sms = ""
-            st.experimental_rerun()
+        if st.button("🗑️ Clear"):
+            st.session_state.input_text = ""
+            st.rerun()
 
 if predict_button and input_sms:
     st.markdown("---")

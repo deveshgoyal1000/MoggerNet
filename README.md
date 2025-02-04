@@ -9,13 +9,19 @@ SMS Spam Detection is a machine learning model that takes an SMS as input and pr
 - Pandas
 - NumPy
 - Streamlit
+- NLTK
+- Matplotlib
+- Seaborn
+- WordCloud
 
 ## Features
-- Data collection
-- Data cleaning and preprocessing
-- Exploratory Data Analysis
-- Model building and selection
-- Web deployment using Streamlit
+- Real-time SMS spam detection
+- Multi-language support
+- Message statistics
+- Word cloud visualization
+- Confidence scores
+- Spam indicator detection
+- Enhanced UI with sidebar options
 
 ### Data Collection
 The SMS Spam Collection dataset was collected from Kaggle, which contains over 5,500 SMS messages labeled as either spam or not spam.
@@ -34,23 +40,26 @@ Multiple classifier models were tried, including NaiveBayes, random forest, KNN,
 The model was deployed on the web using Streamlit. The user interface has a simple input box where the user can input a message, and the model will predict whether it is spam or not spam.
 
 ## Demo
-To try out the SMS Spam Detection model, visit [here](https://shrudex-sms-spam-detection.streamlit.app/).
+To try out the SMS Spam Detection model, visit [here](https://moggernet-sms-spam-detection.streamlit.app/).
 
 ## Usage
 To use the SMS Spam Detection model on your own machine, follow these steps:
 
-+ Clone this repository.
-+ Install the required Python packages using 
+1. Clone this repository
+2. Install the required Python packages:
+```bash
+pip install -r requirements.txt
 ```
-pip install -r requirements.txt.
+3. Run the model:
+```bash
+streamlit run app.py
 ```
-+ Run the model using 
-```
-streamlit run app.py.
-```
-+ Visit localhost:8501 on your web browser to access the web app.
+4. Visit localhost:8501 on your web browser
 
 ## Contributions
-Contributions to this project are welcome. If you find any issues or have any suggestions for improvement, please open an issue or a pull request on this repository.
+Contributions to this project are welcome. If you find any issues or have suggestions for improvement, please open an issue or a pull request.
+
+## Created By
+MoggerNet - 2024
 
 

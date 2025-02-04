@@ -47,8 +47,9 @@ def transform_text(text):
     return " ".join(y)
 
 
-tk = pickle.load(open("vectorizer.pkl", 'rb'))
-model = pickle.load(open("model.pkl", 'rb'))
+# Load the model and vectorizer
+tfidf = pickle.load(open('vectorizer.pkl', 'rb'))
+model = pickle.load(open('model.pkl', 'rb'))
 
 # Page config
 st.set_page_config(page_title="SMS Spam Detection", layout="wide")
@@ -61,11 +62,11 @@ show_confidence = st.sidebar.checkbox("Show Confidence Score")
 language = st.sidebar.selectbox("Select Language", ["English", "Spanish", "French", "German"])
 
 # Main content
-st.title("SMS Spam Detection Model")
+st.title("SMS Spam Detection")
 st.write("*MoggerNet*")
     
 
-input_sms = st.text_area("Enter the SMS")
+input_sms = st.text_area("Enter the message")
 
 if st.button('Predict'):
     if input_sms:
@@ -78,7 +79,7 @@ if st.button('Predict'):
         transformed_sms = transform_text(input_sms)
         
         # Vectorize
-        vector_input = tk.transform([transformed_sms])
+        vector_input = tfidf.transform([transformed_sms])
         
         # Predict
         result = model.predict(vector_input)[0]

@@ -53,7 +53,7 @@ language = st.sidebar.selectbox("Select Language", ["English", "Spanish", "Frenc
 
 # Main content
 st.title("SMS Spam Detection Model")
-st.write("*Made with ❤️ by MoggerNet*")
+st.write("*MoggerNet*")
     
 
 input_sms = st.text_area("Enter the SMS")

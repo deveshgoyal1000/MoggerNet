@@ -120,6 +120,7 @@ for ham in modern_ham:
 
 # Add these to modern_spam list
 modern_spam.extend([
+    # Very Short Spam
     "Win $1000!",
     "Free Gift!",
     "Click now!",
@@ -129,7 +130,56 @@ modern_spam.extend([
     "You won!",
     "Act now!",
     "Free money!",
-    "Urgent!"
+    "Urgent!",
+    
+    # Crypto/NFT Scams
+    "BTC x100!",
+    "NFT drop!",
+    "Crypto boom!",
+    "ETH giveaway!",
+    "Mine BTC free!",
+    
+    # Account Alerts
+    "Account locked!",
+    "Login alert!",
+    "Verify now!",
+    "Password reset!",
+    "Security alert!",
+    
+    # Shopping/Deals
+    "90% OFF!",
+    "Buy now!",
+    "Flash sale!",
+    "Deal ends!",
+    "Free shipping!",
+    
+    # Financial Hooks
+    "Easy loan!",
+    "Quick cash!",
+    "Debt free!",
+    "Make money!",
+    "Rich quick!",
+    
+    # Subscription Traps
+    "Free trial!",
+    "Subscribe now!",
+    "Premium free!",
+    "VIP access!",
+    "Join now!",
+    
+    # Job Scams
+    "Hire now!",
+    "Work home!",
+    "Quick money!",
+    "Easy job!",
+    "Earn fast!",
+    
+    # Urgency Words
+    "Last chance!",
+    "Don't miss!",
+    "Hurry up!",
+    "Time's up!",
+    "Limited!"
 ])
 
 # Text preprocessing function

@@ -156,11 +156,22 @@ tfidf = TfidfVectorizer(max_features=3000, ngram_range=(1,2))
 X = tfidf.fit_transform(df['transformed_text']).toarray()
 y = df['result'].apply(lambda x: 1 if x == 'spam' else 0)
 
+# After creating X and y, add:
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
 print("Training model...")
 start_time = time.time()
 etc = ExtraTreesClassifier(n_estimators=200, random_state=42)
-etc.fit(X, y)
+etc.fit(X_train, y_train)
 print(f"Training completed in {time.time() - start_time:.2f} seconds")
+
+# Save test predictions
+y_pred = etc.predict(X_test)
+test_data = {
+    'y_test': y_test,
+    'y_pred': y_pred
+}
+pickle.dump(test_data, open('test_data.pkl', 'wb'))
 
 print("Saving model files...")
 pickle.dump(tfidf, open('vectorizer.pkl', 'wb'))

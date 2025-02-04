@@ -17,7 +17,7 @@ import string
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from utils.preprocessing import transform_text, translate_text
-from utils.visualization import plot_wordcloud, plot_confidence, show_message_stats
+from utils.visualization import plot_wordcloud, plot_confidence, show_message_stats, show_performance_metrics, plot_confusion_matrix
 import base64
 
 ps = PorterStemmer()
@@ -86,6 +86,14 @@ def load_models():
     model = pickle.load(open('model.pkl', 'rb'))
     return tfidf, model
 
+@st.cache_resource
+def load_test_data():
+    try:
+        test_data = pickle.load(open('test_data.pkl', 'rb'))
+        return test_data
+    except:
+        return None
+
 tfidf, model = load_models()
 
 # Sidebar
@@ -102,6 +110,39 @@ with st.sidebar:
     show_confidence = st.checkbox("Show Confidence Score", value=True)
     show_stats = st.checkbox("Show Message Statistics", value=True)
     show_wordcloud = st.checkbox("Show Word Cloud")
+    
+    st.markdown("### 📊 Model Performance")
+    if st.button("Show Model Metrics"):
+        test_data = load_test_data()
+        if test_data:
+            metrics = show_performance_metrics(test_data['y_test'], test_data['y_pred'])
+            
+            # Display metrics
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Accuracy", f"{metrics['Accuracy']*100:.2f}%")
+            with col2:
+                st.metric("Precision", f"{metrics['Precision']*100:.2f}%")
+            with col3:
+                st.metric("Recall", f"{metrics['Recall']*100:.2f}%")
+            
+            # Show confusion matrix
+            st.markdown("#### Confusion Matrix")
+            plot_confusion_matrix(test_data['y_test'], test_data['y_pred'])
+            
+            # Add explanation
+            st.markdown("""
+                #### Metrics Explanation:
+                - **Accuracy**: Percentage of correct predictions (both spam and non-spam)
+                - **Precision**: Percentage of correct spam predictions out of all spam predictions
+                - **Recall**: Percentage of actual spam messages that were correctly identified
+                
+                #### Confusion Matrix:
+                - True Negatives (top-left): Correctly identified non-spam
+                - False Positives (top-right): Non-spam wrongly marked as spam
+                - False Negatives (bottom-left): Spam wrongly marked as non-spam
+                - True Positives (bottom-right): Correctly identified spam
+            """)
     
     st.markdown("---")
     st.markdown("### 🛠️ About")

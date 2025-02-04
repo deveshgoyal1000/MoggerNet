@@ -22,9 +22,6 @@ import base64
 
 ps = PorterStemmer()
 
-if 'input_text' not in st.session_state:
-    st.session_state.input_text = ""
-
 def transform_text(text):
     text = text.lower()
     text = nltk.word_tokenize(text)
@@ -120,20 +117,20 @@ with col2:
     st.title("🛡️ SMS Spam Detector")
     st.markdown("### Protect yourself from unwanted messages")
     
-    # Input area
+    # Input area with a default value
     input_sms = st.text_area(
         "Enter your message here",
+        value="",  # Default empty value
         height=150,
-        placeholder="Type or paste your message here...",
-        key="input_text"
+        placeholder="Type or paste your message here..."
     )
     
     col_button1, col_button2 = st.columns(2)
     with col_button1:
         predict_button = st.button("🔍 Analyze Message")
     with col_button2:
+        # Simplified clear button
         if st.button("🗑️ Clear"):
-            st.session_state.input_text = ""
             st.rerun()
 
 if predict_button and input_sms:

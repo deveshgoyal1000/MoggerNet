@@ -17,7 +17,7 @@ import string
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from utils.preprocessing import transform_text, translate_text
-from utils.visualization import plot_wordcloud, plot_confidence, show_message_stats, show_performance_metrics, plot_confusion_matrix
+from utils.visualization import plot_wordcloud, plot_confidence, show_message_stats, show_performance_metrics, plot_confusion_matrix, plot_roc_curve, show_detailed_metrics
 import base64
 
 ps = PorterStemmer()
@@ -119,34 +119,74 @@ with st.sidebar:
             st.error("Could not load test data. Please run train_model.py first.")
         else:
             try:
+                # Basic Metrics
                 metrics = show_performance_metrics(test_data['y_test'], test_data['y_pred'])
                 
-                # Display metrics
-                col1, col2, col3 = st.columns(3)
+                st.markdown("#### 📈 Basic Performance Metrics")
+                col1, col2, col3, col4 = st.columns(4)
                 with col1:
                     st.metric("Accuracy", f"{metrics['Accuracy']*100:.2f}%")
                 with col2:
                     st.metric("Precision", f"{metrics['Precision']*100:.2f}%")
                 with col3:
                     st.metric("Recall", f"{metrics['Recall']*100:.2f}%")
+                with col4:
+                    st.metric("F1 Score", f"{metrics['F1 Score']*100:.2f}%")
                 
-                # Show confusion matrix
-                st.markdown("#### Confusion Matrix")
-                plot_confusion_matrix(test_data['y_test'], test_data['y_pred'])
+                # Detailed Metrics
+                st.markdown("#### 🔍 Detailed Analysis")
+                detailed_metrics = show_detailed_metrics(test_data['y_test'], test_data['y_pred'])
                 
-                # Add explanation
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("##### Confusion Matrix Breakdown")
+                    st.info(f"""
+                    - True Negatives: {detailed_metrics['True Negatives']}
+                    - False Positives: {detailed_metrics['False Positives']}
+                    - False Negatives: {detailed_metrics['False Negatives']}
+                    - True Positives: {detailed_metrics['True Positives']}
+                    """)
+                
+                with col2:
+                    st.markdown("##### Additional Metrics")
+                    st.info(f"""
+                    - Specificity: {detailed_metrics['Specificity']*100:.2f}%
+                    - False Positive Rate: {detailed_metrics['False Positive Rate']*100:.2f}%
+                    - False Negative Rate: {detailed_metrics['False Negative Rate']*100:.2f}%
+                    """)
+                
+                # Visualizations
+                st.markdown("#### 📊 Visualizations")
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.markdown("##### Confusion Matrix")
+                    plot_confusion_matrix(test_data['y_test'], test_data['y_pred'])
+                
+                with col2:
+                    st.markdown("##### ROC Curve")
+                    plot_roc_curve(test_data['y_test'], test_data['y_pred_proba'][:, 1])
+                
+                # Interpretation
                 st.markdown("""
-                    #### Metrics Explanation:
-                    - **Accuracy**: Percentage of correct predictions (both spam and non-spam)
-                    - **Precision**: Percentage of correct spam predictions out of all spam predictions
-                    - **Recall**: Percentage of actual spam messages that were correctly identified
-                    
-                    #### Confusion Matrix:
-                    - True Negatives (top-left): Correctly identified non-spam
-                    - False Positives (top-right): Non-spam wrongly marked as spam
-                    - False Negatives (bottom-left): Spam wrongly marked as non-spam
-                    - True Positives (bottom-right): Correctly identified spam
+                #### 📝 Interpretation Guide
+                
+                **Basic Metrics:**
+                - **Accuracy**: Overall correctness of predictions
+                - **Precision**: Accuracy of spam predictions
+                - **Recall**: Ability to detect actual spam messages
+                - **F1 Score**: Balance between precision and recall
+                
+                **Advanced Metrics:**
+                - **Specificity**: Ability to correctly identify non-spam
+                - **False Positive Rate**: Rate of non-spam marked as spam
+                - **False Negative Rate**: Rate of spam marked as non-spam
+                
+                **Visualizations:**
+                - **Confusion Matrix**: Detailed breakdown of predictions
+                - **ROC Curve**: Model's ability to distinguish between classes
                 """)
+                
             except Exception as e:
                 st.error(f"Error calculating metrics: {str(e)}")
     

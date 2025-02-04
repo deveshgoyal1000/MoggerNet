@@ -167,9 +167,11 @@ print(f"Training completed in {time.time() - start_time:.2f} seconds")
 
 # Save test predictions
 y_pred = etc.predict(X_test)
+y_pred_proba = etc.predict_proba(X_test)
 test_data = {
     'y_test': y_test,
-    'y_pred': y_pred
+    'y_pred': y_pred,
+    'y_pred_proba': y_pred_proba
 }
 pickle.dump(test_data, open('test_data.pkl', 'wb'))
 

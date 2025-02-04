@@ -194,7 +194,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style='text-align: center'>
-        <p>Made with Streamlit • <a href='https://github.com/yourusername/sms-spam-detector'>GitHub</a></p>
+        <p>MoggerNet, Deveshgoyal1000</p>
     </div>
     """,
     unsafe_allow_html=True

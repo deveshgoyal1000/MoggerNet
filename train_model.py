@@ -118,6 +118,20 @@ for spam in modern_spam:
 for ham in modern_ham:
     df = df._append({'result': 'ham', 'input': ham}, ignore_index=True)
 
+# Add these to modern_spam list
+modern_spam.extend([
+    "Win $1000!",
+    "Free Gift!",
+    "Click now!",
+    "Cash prize!",
+    "Claim now!",
+    "Free iPhone!",
+    "You won!",
+    "Act now!",
+    "Free money!",
+    "Urgent!"
+])
+
 # Text preprocessing function
 def transform_text(text):
     if not isinstance(text, str):

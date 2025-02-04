@@ -115,8 +115,12 @@ for ham in modern_ham:
 
 # Text preprocessing function
 def transform_text(text):
+    if not isinstance(text, str):
+        return ""
+        
     text = text.lower()
-    text = nltk.word_tokenize(text)
+    # Simple word tokenization using split()
+    text = text.split()
     
     y = []
     for i in text:

@@ -7,12 +7,17 @@ import pickle
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
+from tqdm import tqdm
+import time
+
+print("Starting model training...")
 
 # Download required NLTK data
 nltk.download('punkt')
 nltk.download('stopwords')
 
 # Load and prepare data
+print("Loading data...")
 df = pd.read_csv('sms-spam.csv')
 df = df.drop(['Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4'], axis=1)
 df = df.rename(columns={'v1': 'result', 'v2': 'input'})
@@ -143,19 +148,21 @@ def transform_text(text):
     
     return " ".join(y)
 
-# Transform the text data
+print("Preprocessing text...")
 df['transformed_text'] = df['input'].apply(transform_text)
 
-# Create TF-IDF vectors
+print("Creating TF-IDF vectors...")
 tfidf = TfidfVectorizer(max_features=3000, ngram_range=(1,2))
 X = tfidf.fit_transform(df['transformed_text']).toarray()
 y = df['result'].apply(lambda x: 1 if x == 'spam' else 0)
 
-# Train model
+print("Training model...")
+start_time = time.time()
 etc = ExtraTreesClassifier(n_estimators=200, random_state=42)
 etc.fit(X, y)
+print(f"Training completed in {time.time() - start_time:.2f} seconds")
 
-# Save the model and vectorizer
+print("Saving model files...")
 pickle.dump(tfidf, open('vectorizer.pkl', 'wb'))
 pickle.dump(etc, open('model.pkl', 'wb'))
 

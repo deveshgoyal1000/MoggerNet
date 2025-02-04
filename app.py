@@ -1,3 +1,6 @@
+deactivate
+Remove-Item -Recurse -Force venv/
+
 import nltk
 import os
 

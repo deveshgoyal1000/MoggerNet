@@ -142,13 +142,13 @@ def transform_text(text):
 # Transform the text data
 df['transformed_text'] = df['input'].apply(transform_text)
 
-# Create TF-IDF vectors with improved parameters
+# Create TF-IDF vectors
 tfidf = TfidfVectorizer(max_features=3000, ngram_range=(1,2))
 X = tfidf.fit_transform(df['transformed_text']).toarray()
 y = df['result'].apply(lambda x: 1 if x == 'spam' else 0)
 
-# Train model with better parameters
-etc = ExtraTreesClassifier(n_estimators=200, random_state=42, min_samples_split=2, min_samples_leaf=1)
+# Train model
+etc = ExtraTreesClassifier(n_estimators=200, random_state=42)
 etc.fit(X, y)
 
 # Save the model and vectorizer

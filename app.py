@@ -91,7 +91,8 @@ def load_test_data():
     try:
         test_data = pickle.load(open('test_data.pkl', 'rb'))
         return test_data
-    except:
+    except Exception as e:
+        st.error(f"Error loading test data: {str(e)}")
         return None
 
 tfidf, model = load_models()
@@ -114,35 +115,40 @@ with st.sidebar:
     st.markdown("### 📊 Model Performance")
     if st.button("Show Model Metrics"):
         test_data = load_test_data()
-        if test_data:
-            metrics = show_performance_metrics(test_data['y_test'], test_data['y_pred'])
-            
-            # Display metrics
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric("Accuracy", f"{metrics['Accuracy']*100:.2f}%")
-            with col2:
-                st.metric("Precision", f"{metrics['Precision']*100:.2f}%")
-            with col3:
-                st.metric("Recall", f"{metrics['Recall']*100:.2f}%")
-            
-            # Show confusion matrix
-            st.markdown("#### Confusion Matrix")
-            plot_confusion_matrix(test_data['y_test'], test_data['y_pred'])
-            
-            # Add explanation
-            st.markdown("""
-                #### Metrics Explanation:
-                - **Accuracy**: Percentage of correct predictions (both spam and non-spam)
-                - **Precision**: Percentage of correct spam predictions out of all spam predictions
-                - **Recall**: Percentage of actual spam messages that were correctly identified
+        if test_data is None:
+            st.error("Could not load test data. Please run train_model.py first.")
+        else:
+            try:
+                metrics = show_performance_metrics(test_data['y_test'], test_data['y_pred'])
                 
-                #### Confusion Matrix:
-                - True Negatives (top-left): Correctly identified non-spam
-                - False Positives (top-right): Non-spam wrongly marked as spam
-                - False Negatives (bottom-left): Spam wrongly marked as non-spam
-                - True Positives (bottom-right): Correctly identified spam
-            """)
+                # Display metrics
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("Accuracy", f"{metrics['Accuracy']*100:.2f}%")
+                with col2:
+                    st.metric("Precision", f"{metrics['Precision']*100:.2f}%")
+                with col3:
+                    st.metric("Recall", f"{metrics['Recall']*100:.2f}%")
+                
+                # Show confusion matrix
+                st.markdown("#### Confusion Matrix")
+                plot_confusion_matrix(test_data['y_test'], test_data['y_pred'])
+                
+                # Add explanation
+                st.markdown("""
+                    #### Metrics Explanation:
+                    - **Accuracy**: Percentage of correct predictions (both spam and non-spam)
+                    - **Precision**: Percentage of correct spam predictions out of all spam predictions
+                    - **Recall**: Percentage of actual spam messages that were correctly identified
+                    
+                    #### Confusion Matrix:
+                    - True Negatives (top-left): Correctly identified non-spam
+                    - False Positives (top-right): Non-spam wrongly marked as spam
+                    - False Negatives (bottom-left): Spam wrongly marked as non-spam
+                    - True Positives (bottom-right): Correctly identified spam
+                """)
+            except Exception as e:
+                st.error(f"Error calculating metrics: {str(e)}")
     
     st.markdown("---")
     st.markdown("### 🛠️ About")

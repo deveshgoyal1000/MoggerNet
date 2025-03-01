@@ -1,0 +1,19 @@
+jenkins:
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: admin
+          password: ${JENKINS_ADMIN_PASSWORD}
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+          - name: "admin"
+            permissions:
+              - "Overall/Administer"
+          - name: "developer"
+            permissions:
+              - "Job/Build"
+              - "Job/Read"
+              - "Job/Workspace" 

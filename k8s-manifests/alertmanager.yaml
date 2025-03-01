@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  namespace: jenkins
+data:
+  alertmanager.yml: |
+    global:
+      slack_api_url: 'https://hooks.slack.com/services/YOUR_SLACK_WEBHOOK'
+    
+    route:
+      receiver: 'slack-notifications'
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 4h
+      
+    receivers:
+    - name: 'slack-notifications'
+      slack_configs:
+      - channel: '#jenkins-alerts'
+        title: "{{ range .Alerts }}{{ .Annotations.summary }}\n{{ end }}"
+        text: "{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}" 
